@@ -6,6 +6,8 @@ import * as LO from '../store/listIdOrders'
 import * as L from '../store/listEntities'
 import * as LC from '../store/listIdCardIdOrders'
 import {removeCard} from './cardEntities'
+import {DropResult} from 'react-beautiful-dnd'
+import {insertItemAtIndexInArray, removeItemAtIndexInArray, swapItemsInArray} from '../utils/arrayUtil.ts'
 
 export const useLists = () => {
   const dispatch = useDispatch()
@@ -46,5 +48,37 @@ export const useLists = () => {
     dispatch(LO.setListIdOrders(newOrders))
   }, [dispatch, listIdOrders])
 
-  return {lists, onCreateList, onRemoveList, onMoveList}
+  const onDragEnd = useCallback((result: DropResult) => {
+    console.log('onDragEnd result', result)
+    const destinationListId = result.destination?.droppableId
+    const destinationCardIndex = result.destination?.index
+    if (destinationListId === undefined || destinationCardIndex === undefined) {
+      return
+    }
+
+    const sourceListId = result.source.droppableId
+    const sourceCardIndex = result.source.index
+    if (destinationListId === sourceListId) {
+      const cardIdOrders = listIdCardIdOrders[destinationListId]
+
+      dispatch(LC.setListIdCardIds({
+        listId: destinationListId,
+        cardIds: swapItemsInArray(cardIdOrders, sourceCardIndex, destinationCardIndex)
+      }))
+    } else {
+      const sourceCardIdOrders = listIdCardIdOrders[sourceListId]
+      dispatch(LC.setListIdCardIds({
+        listId: sourceListId,
+        cardIds: removeItemAtIndexInArray(sourceCardIdOrders, sourceCardIndex)
+      }))
+      const destinationCardIdOrders = listIdCardIdOrders[destinationListId]
+
+      dispatch(LC.setListIdCardIds({
+        listId: destinationListId,
+        cardIds: insertItemAtIndexInArray(destinationCardIdOrders, destinationCardIndex, result.draggableId)
+      }))
+    }
+  }, [listIdCardIdOrders, dispatch])
+
+  return {lists, onCreateList, onRemoveList, onMoveList, onDragEnd}
 }
