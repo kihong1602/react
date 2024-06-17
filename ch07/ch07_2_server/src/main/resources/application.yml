@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ch07_2_server
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      database: mydb
+
