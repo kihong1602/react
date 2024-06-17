@@ -1,4 +1,4 @@
-import {createContext, FC, PropsWithChildren, useCallback, useContext, useState} from 'react'
+import {createContext, FC, PropsWithChildren, useCallback, useState} from 'react'
 import {writeObjectP} from '../utils/readWriteObjectP.ts'
 
 export type LoggedUser = {
@@ -48,8 +48,4 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({children
   const value = {loggedUser, signup, login, logout}
 
   return <AuthContext.Provider value={value} children={children} />
-}
-
-export const useAuth = () => {
-  return useContext(AuthContext)
 }

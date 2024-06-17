@@ -1,7 +1,7 @@
 import {randomEmail} from '../../data'
 import {ChangeEvent, useCallback, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
-import {useAuth} from '../../contexts/AuthContext.tsx'
+import useAuth from '../../hooks/useAuth.ts'
 
 type SignUpFormType = Record<'email' | 'password' | 'confirmPassword', string>
 const initialFormState = {email: randomEmail(), password: '1', confirmPassword: '1'}

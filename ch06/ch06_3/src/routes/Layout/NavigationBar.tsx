@@ -1,6 +1,6 @@
 import {Link as RRLink} from 'react-router-dom'
 import {Link} from '../../components'
-import {useAuth} from '../../contexts/AuthContext.tsx'
+import useAuth from '../../hooks/useAuth.ts'
 
 export default function NavigationBar() {
   const {loggedUser} = useAuth()
