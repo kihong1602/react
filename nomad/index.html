@@ -7,29 +7,26 @@
 	<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 	<script type="text/babel">
-		const root = ReactDOM.createRoot(document.getElementById("root"));
 
-		let counter = 0;
-		const countUp = () => {
-			counter++;
-			render();
+		const App = () => {
+			const [counter, setCounter] = React.useState(0);
+
+			const handleClick = () => {
+				setCounter(counter => counter + 1);
+			};
+
+			return (
+				<div>
+					<h3>Total clicks: {counter}</h3>
+					<button onClick={handleClick}>
+						Click Me
+					</button>
+				</div>
+			);
 		};
 
-		const render = () => {
-			root.render(<Container />);
-		};
-
-		const Container = () => (
-			<div>
-				<h3>
-					Total clicks: {counter}
-				</h3>
-				<button onClick={countUp}>
-					Click Me
-				</button>
-			</div>
+		ReactDOM.createRoot(document.getElementById("root")).render(
+			<App />
 		);
-
-		render();
 	</script>
 </html>
