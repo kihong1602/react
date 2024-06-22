@@ -9,12 +9,12 @@
 	<script type="text/babel">
 
 		const App = () => {
-			const [minutes, setMinutes] = React.useState(0);
-			const onChange = (e) => {
-				setMinutes(e.target.value);
-			};
+			const [amount, setAmount] = React.useState(0);
+			const [flip, setFlip] = React.useState(false);
 
-			const reset = () => setMinutes(0);
+			const onChange = (e) => setAmount(e.target.value);
+			const reset = () => setAmount(0);
+			const onFlip = () => setFlip(flip => !flip);
 
 			return (
 				<div>
@@ -22,21 +22,27 @@
 					<div>
 						<label htmlFor="minutes">Minutes</label>
 						<input
-							value={minutes}
+							value={flip ? amount * 60 : amount}
 							id="minutes"
 							placeholder="Minutes"
 							type="number"
-							onChange={onChange} />
+							onChange={onChange}
+							disabled={flip}
+						/>
 					</div>
 					<div>
 						<label htmlFor="hours">Hours</label>
 						<input
-							value={Math.round(minutes / 60)}
+							value={flip ? amount : Math.round(amount / 60)}
 							id="hours"
 							placeholder="Hours"
-							type="number" />
+							type="number"
+							disabled={!flip}
+							onChange={onChange}
+						/>
 					</div>
 					<button onClick={reset}>Reset</button>
+					<button onClick={onFlip}>Flip</button>
 				</div>
 			);
 		};
