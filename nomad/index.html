@@ -5,10 +5,11 @@
 	</body>
 	<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 	<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+	<script src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
 	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 	<script type="text/babel">
 
-		const Button = ({ text, changeValue }) => {
+		const Button = ({ text, fontSize = 14 }) => {
 			console.log(`${text} was rendered`);
 			return (
 				<button
@@ -17,23 +18,27 @@
 						color: "white",
 						padding: "10px 20px",
 						border: 0,
-						borderRadius: 10
+						borderRadius: 10,
+						fontSize
 					}}
-					onClick={changeValue}>
+				>
 					{text}
 				</button>
 			);
 		};
 
-		const MemorizedButton = React.memo(Button);
+		Button.propTypes = {
+			text: PropTypes.string.isRequired,
+			fontSize: PropTypes.number
+		};
 
 		const App = () => {
 			const [value, setValue] = React.useState("Save Changes");
 			const changeValue = () => setValue("Revert Changes");
 			return (
 				<div>
-					<MemorizedButton text={value} changeValue={changeValue} />
-					<MemorizedButton text={"Continue"} />
+					<Button text={value} fontSize={18} />
+					<Button text={"Continue"} />
 				</div>
 			);
 		};
