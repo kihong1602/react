@@ -3,33 +3,36 @@ import axios from "axios";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
-  const [money, setMoney] = useState(0);
-  const onChange = (e) => setMoney(e.target.value);
+  const [movies, setMovies] = useState([]);
+
+  const getMovies = async () => {
+    const json = await (
+        await axios.get(`https://yts.mx/api/v2/list_movies.json?minimum_rating=8.5&sort_by=year`)
+    ).data;
+    setMovies(json.data.movies);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    axios.get('https://api.coinpaprika.com/v1/tickers')
-    .then(res => res.data)
-    .then(data => {
-      setCoins(data);
-      setLoading(false);
-    });
+    getMovies();
   }, []);
+
+  console.log(movies);
   return (
       <div>
-        <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
-        <input type="number" value={money} onChange={onChange} placeholder={'Input Your Money'}/>
-        {loading ? <strong>Loading...</strong> : (
-            <select>
-              {
-                coins.map((coin, index) =>
-                    <option key={index}>
-                      {coin.name} ({coin.symbol}): {money / coin.quotes.USD.price} {coin.symbol}
-                    </option>)
-              }
-            </select>
+        {loading ? <h1>Loading...</h1> : (
+            movies.map((movie) => (
+                <div key={movie.id}>
+                  <h2>{movie.title}</h2>
+                  <img src={movie.medium_cover_image} alt={movie.title}/>
+                  <p>{movie.summary}</p>
+                  <ul>
+                    {movie.genres.map((g, index) => <li key={index}>{g}</li>)}
+                  </ul>
+                </div>))
         )}
       </div>
-  )
+  );
 }
 
 export default App;
