@@ -9,8 +9,8 @@ function App() {
     if (todo === "") {
       return;
     }
+    setToDos(prev => [todo, ...prev]);
     setTodo("");
-    setToDos(prev => [...prev, todo]);
   }
   useEffect(() => {
     console.log(toDos);
@@ -26,6 +26,10 @@ function App() {
       />
       <button>Add To Do</button>
     </form>
+    <hr/>
+    <ul>
+      {toDos.map((item, index) => <li key={index}>{item}</li>)}
+    </ul>
   </div>;
 }
 
